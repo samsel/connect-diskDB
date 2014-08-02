@@ -26,7 +26,6 @@
   "dependencies": {
     "debuglog": "^1.0.1",
     "diskdb": "^0.1.14",
-    "express-session": "^1.7.2",
     "lodash": "^2.4.1"
   }
 }

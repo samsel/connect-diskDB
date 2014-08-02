@@ -1,64 +1,70 @@
 'use strict';
 
-var Store = require('express-session').Store,
-    DiskDB = require('diskdb'),
+var DiskDB = require('diskdb'),
     _ = require('lodash'),
     DiskDBSessionStore;
 
-DiskDBSessionStore = module.exports = function DiskDBSessionStore (options) {
-    options = options || {};
+module.exports = function (connect) {
 
-    this.db = DiskDB.connect(options.path, [options.db]);
-    this.prefix = this.prefix || 'session';
-    Store.call(this, options);
-};
+    var Store = connect.Store;
 
-/**
-* Inherit from `Store`.
-*
-*/
-DiskDBSessionStore.prototype.__proto__ = Store.prototype;
+    DiskDBSessionStore = function DiskDBSessionStore (options) {
+        options = options || {};
 
-/**
-* Attempt to fetch session by the given `sessionId`.
-*
-* @param {String} sessionId
-* @param {Function} callback
-* @api public
-*/
-DiskDBSessionStore.prototype.get = function (sessionId, callback) {
-    sessionId = this.prefix + sessionId;
-    callback(null, this.db.findOne({
-        sessionId:sessionId
-    }));
-};
+        this.db = DiskDB.connect(options.path, [options.name])[options.name];
+        this.prefix = this.prefix || 'session';
+        Store.call(this, options);
+    };
 
-/**
-* Commit the given `session` object associated with the given `sessionId`.
-*
-* @param {String} sessionId
-* @param {Session} session
-* @param {Function} callback
-* @api public
-*/
-DiskDBSessionStore.prototype.set = function (sessionId, session, callback) {
-    sessionId = this.prefix + sessionId;
-    callback(null, this.db.update(
-        {sessionId: sessionId}, 
-        _.extend({sessionId: sessionId}, session), 
-        {upsert: true}
-    ));
-};
+    /**
+    * Inherit from `Store`.
+    *
+    */
+    DiskDBSessionStore.prototype.__proto__ = Store.prototype;
 
-/**
-* Destroy the session associated with the given `sessionId`.
-*
-* @param {String} sessionId
-* @api public
-*/
-DiskDBSessionStore.prototype.destroy = function(sessionId, callback) {
-    sessionId = this.prefix + sessionId;
-    callback(null, this.db.remove({
-        sessionId:sessionId
-    }, false));
+    /**
+    * Attempt to fetch session by the given `sessionId`.
+    *
+    * @param {String} sessionId
+    * @param {Function} callback
+    * @api public
+    */
+    DiskDBSessionStore.prototype.get = function (sessionId, callback) {
+        sessionId = this.prefix + sessionId;
+        callback(null, this.db.findOne({
+            sessionId:sessionId
+        }));
+    };
+
+    /**
+    * Commit the given `session` object associated with the given `sessionId`.
+    *
+    * @param {String} sessionId
+    * @param {Session} session
+    * @param {Function} callback
+    * @api public
+    */
+    DiskDBSessionStore.prototype.set = function (sessionId, session, callback) {
+        sessionId = this.prefix + sessionId;
+        callback(null, this.db.update(
+            {sessionId: sessionId}, 
+            _.extend({sessionId: sessionId}, session), 
+            {upsert: true}
+        ));
+    };
+
+    /**
+    * Destroy the session associated with the given `sessionId`.
+    *
+    * @param {String} sessionId
+    * @api public
+    */
+    DiskDBSessionStore.prototype.destroy = function(sessionId, callback) {
+        sessionId = this.prefix + sessionId;
+        callback(null, this.db.remove({
+            sessionId:sessionId
+        }, false));
+    };  
+
+    return DiskDBSessionStore;
 };
