@@ -1,0 +1,32 @@
+{
+  "name": "connect-diskDB",
+  "version": "0.0.1",
+  "description": "diskDB session store for Connect ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samsel/connect-diskDB.git"
+  },
+  "keywords": [
+    "diskDB",
+    "connect",
+    "sessionStore",
+    "session",
+    "jsondb"
+  ],
+  "author": "Sam Selvanathan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samsel/connect-diskDB/issues"
+  },
+  "homepage": "https://github.com/samsel/connect-diskDB",
+  "dependencies": {
+    "debuglog": "^1.0.1",
+    "diskdb": "^0.1.14",
+    "express-session": "^1.7.2",
+    "lodash": "^2.4.1"
+  }
+}
