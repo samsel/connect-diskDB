@@ -1,26 +1,27 @@
 'use strict';
 
-var DiskDB = require('diskdb'),
+var debug = require('debuglog')('connect:diskDB'),
+    DiskDB = require('diskdb'),
     _ = require('lodash'),
-    DiskDBSessionStore;
+    DiskDBStore;
 
 module.exports = function (connect) {
 
     var Store = connect.Store;
 
-    DiskDBSessionStore = function DiskDBSessionStore (options) {
+    DiskDBStore = function DiskDBStore (options) {
         options = options || {};
-
-        this.db = DiskDB.connect(options.path, [options.name])[options.name];
-        this.prefix = this.prefix || 'session';
         Store.call(this, options);
+        this.db = options.db || DiskDB.connect(options.path, [options.name])[options.name];
+        this.ttl =  options.ttl;
+        this.prefix = this.prefix || 'sess:';
     };
 
     /**
     * Inherit from `Store`.
     *
     */
-    DiskDBSessionStore.prototype.__proto__ = Store.prototype;
+    DiskDBStore.prototype.__proto__ = Store.prototype;
 
     /**
     * Attempt to fetch session by the given `sessionId`.
@@ -29,11 +30,14 @@ module.exports = function (connect) {
     * @param {Function} callback
     * @api public
     */
-    DiskDBSessionStore.prototype.get = function (sessionId, callback) {
+    DiskDBStore.prototype.get = function (sessionId, callback) {
         sessionId = this.prefix + sessionId;
-        callback(null, this.db.findOne({
+        debug('GET "%s"', sessionId);
+        var data = this.db.findOne({
             sessionId:sessionId
-        }));
+        });
+        debug('GOT %j', data);
+        callback(null, data);
     };
 
     /**
@@ -44,8 +48,9 @@ module.exports = function (connect) {
     * @param {Function} callback
     * @api public
     */
-    DiskDBSessionStore.prototype.set = function (sessionId, session, callback) {
+    DiskDBStore.prototype.set = function (sessionId, session, callback) {
         sessionId = this.prefix + sessionId;
+        debug('SET "%s" : %j', sessionId, session);
         callback(null, this.db.update(
             {sessionId: sessionId}, 
             _.extend({sessionId: sessionId}, session), 
@@ -59,12 +64,13 @@ module.exports = function (connect) {
     * @param {String} sessionId
     * @api public
     */
-    DiskDBSessionStore.prototype.destroy = function(sessionId, callback) {
+    DiskDBStore.prototype.destroy = function(sessionId, callback) {
+        debug('DESTROY %s', sessionId);
         sessionId = this.prefix + sessionId;
         callback(null, this.db.remove({
             sessionId:sessionId
         }, false));
     };  
 
-    return DiskDBSessionStore;
+    return DiskDBStore;
 };
