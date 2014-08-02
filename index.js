@@ -17,40 +17,48 @@ DiskDBSessionStore = module.exports = function DiskDBSessionStore (options) {
 * Inherit from `Store`.
 *
 */
-//DiskDBSessionStore.prototype.__proto__ = Store.prototype;
+DiskDBSessionStore.prototype.__proto__ = Store.prototype;
 
 /**
-* Attempt to fetch session by the given `sid`.
+* Attempt to fetch session by the given `sessionId`.
 *
-* @param {String} sid
-* @param {Function} fn
+* @param {String} sessionId
+* @param {Function} callback
 * @api public
 */
-DiskDBSessionStore.prototype.get = function (sid, fn) {
-    sid = this.prefix + sid;
-    fn(null, this.db.findOne({sid:sid}));
+DiskDBSessionStore.prototype.get = function (sessionId, callback) {
+    sessionId = this.prefix + sessionId;
+    callback(null, this.db.findOne({
+        sessionId:sessionId
+    }));
 };
 
 /**
-* Commit the given `sess` object associated with the given `sid`.
+* Commit the given `session` object associated with the given `sessionId`.
 *
-* @param {String} sid
-* @param {Session} sess
-* @param {Function} fn
+* @param {String} sessionId
+* @param {Session} session
+* @param {Function} callback
 * @api public
 */
-DiskDBSessionStore.prototype.set = function (sid, sess, fn) {
-    sid = this.prefix + sid;
-    fn(null, this.db.update({sid: sid}, _.extend({sid: sid}, sess), {upsert: true}));
+DiskDBSessionStore.prototype.set = function (sessionId, session, callback) {
+    sessionId = this.prefix + sessionId;
+    callback(null, this.db.update(
+        {sessionId: sessionId}, 
+        _.extend({sessionId: sessionId}, session), 
+        {upsert: true}
+    ));
 };
 
 /**
-* Destroy the session associated with the given `sid`.
+* Destroy the session associated with the given `sessionId`.
 *
-* @param {String} sid
+* @param {String} sessionId
 * @api public
 */
-DiskDBSessionStore.prototype.destroy = function(sid, fn) {
-    sid = this.prefix + sid;
-    fn(null, this.db.remove({sid:sid}, false));
+DiskDBSessionStore.prototype.destroy = function(sessionId, callback) {
+    sessionId = this.prefix + sessionId;
+    callback(null, this.db.remove({
+        sessionId:sessionId
+    }, false));
 };
