@@ -13,7 +13,6 @@ module.exports = function (connect) {
         options = options || {};
         Store.call(this, options);
         this.db = options.db || DiskDB.connect(options.path, [options.name])[options.name];
-        this.ttl =  options.ttl;
         this.prefix = this.prefix || 'sess:';
     };
 
