@@ -1,5 +1,5 @@
 {
-  "name": "connect-diskDB",
+  "name": "connect-diskdb",
   "version": "0.0.1",
   "description": "diskDB session store for Connect ",
   "main": "index.js",
@@ -11,7 +11,7 @@
     "url": "https://github.com/samsel/connect-diskDB.git"
   },
   "keywords": [
-    "diskDB",
+    "diskdB",
     "connect",
     "sessionStore",
     "session",

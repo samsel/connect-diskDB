@@ -5,7 +5,7 @@ diskDB [https://github.com/arvindr21/diskDB] session store for Connect.
 
 ### Installation
 ```shell
-$ npm install connect-diskDB
+$ npm install connect-diskdb
 ``` 
 
 ### Usage 
@@ -13,7 +13,7 @@ $ npm install connect-diskDB
 ```javascript
 	var app = require('express')(),
 		session = require('express-session'),
-		SessionStore = require('connect-diskDB')(session);
+		SessionStore = require('connect-diskdb')(session);
 
 	// create a DiskDB Session Store
 	var options = {
@@ -34,5 +34,5 @@ $ npm install connect-diskDB
 ```
 
 ### Debug
-To enable 'connect-diskDB' debug logs in your app use 'connect:diskDB' as Node Debug environment.
-Example: `NODE_DEBUG=connect:diskDB node index.js`
+To enable 'connect-diskdb' debug logs in your app use 'connect:diskdb' as Node Debug environment.
+Example: `NODE_DEBUG=connect:diskdb node index.js`

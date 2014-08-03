@@ -1,6 +1,6 @@
 'use strict';
 
-var debug = require('debuglog')('connect:diskDB'),
+var debug = require('debuglog')('connect:diskdb'),
     DiskDB = require('diskdb'),
     _ = require('lodash'),
     DiskDBStore;
